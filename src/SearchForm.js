@@ -2,6 +2,9 @@ import React, { Fragment, Component } from "react";
 import { withRouter } from "react-router";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { setSearch } from "./actions";
 
 class SearchFormComponent extends Component {
   state = {
@@ -12,11 +15,15 @@ class SearchFormComponent extends Component {
     this.setState({ value: value });
   };
 
+  goToRepos = () => {
+    const { history, updateSearch } = this.props;
+    const { value } = this.state;
+    updateSearch(value);
+    history.push(`/repositories/${value}`);
+  };
+
   render() {
     const { value } = this.state;
-    const { onUserSelect } = this.props;
-    const { visible } = this.props;
-    const { history } = this.props;
 
     const buttonStyle = {
       "margin-bottom": "20px"
@@ -34,7 +41,7 @@ class SearchFormComponent extends Component {
         <RaisedButton
           label="Search"
           secondary={true}
-          onClick={() => history.push(`/repositories/${value}`)}
+          onClick={this.goToRepos}
           style={buttonStyle}
         />
       </Fragment>
@@ -42,4 +49,11 @@ class SearchFormComponent extends Component {
   }
 }
 
-export const SearchForm = withRouter(SearchFormComponent);
+const mapDispatchToProps = dispatch => ({
+  updateSearch: searchTerm => dispatch(setSearch(searchTerm))
+});
+
+export const SearchForm = compose(
+  connect(null, mapDispatchToProps),
+  withRouter
+)(SearchFormComponent);

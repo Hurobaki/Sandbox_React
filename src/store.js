@@ -1,6 +1,5 @@
 import { createStore } from "redux";
-
-export const SET_SEARCH = "SET_SEARCH";
+import * as actions from "./actions";
 
 const initialState = {
   search: ""
@@ -8,7 +7,7 @@ const initialState = {
 
 const reducer = (state = initialState, { type, ...action }) => {
   switch (type) {
-    case SET_SEARCH:
+    case actions.SET_SEARCH:
       const { search } = action;
       return { ...state, search };
     default:

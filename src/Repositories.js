@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 import { ListRepositories } from "./ListRepositories";
+import { compose } from "redux";
+import { connect } from "react-redux";
 import Avatar from "material-ui/Avatar";
 import Chip from "material-ui/Chip";
 
@@ -35,6 +37,13 @@ class RepositoriesComponent extends Component {
     }
   }
 
+  componentWillReceiveProps({ search: nextSearch }) {
+    const { search } = this.props;
+    if (search !== nextSearch) {
+      this.getUserRepositories(nextSearch);
+    }
+  }
+
   async componentDidMount() {
     const { match: { params } } = this.props;
     this.setState({
@@ -62,8 +71,6 @@ class RepositoriesComponent extends Component {
       console.log(error);
     }
   }
-
-
 
   render() {
     const { match: { params } } = this.props;
@@ -108,4 +115,10 @@ class RepositoriesComponent extends Component {
   }
 }
 
-export const Repositories = withRouter(RepositoriesComponent);
+const mapStateToProps = state => ({
+  search: state.search
+});
+
+export const Repositories = compose(connect(mapStateToProps), withRouter)(
+  RepositoriesComponent
+);
