@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { render } from "react-dom";
 import { SearchForm } from "./SearchForm";
-import { Repositories } from "./Repositories";
 
 class AppComponent extends Component {
   state = {

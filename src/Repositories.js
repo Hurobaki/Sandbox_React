@@ -74,32 +74,33 @@ class RepositoriesComponent extends Component {
 
   render() {
     const { match: { params } } = this.props;
-    const errorStyle = {
-      color: "red"
-    };
-
-    const ChipStyle = {
-      "margin-top": "20px"
-    };
 
     const styles = {
-      display: "flex",
-      "align-items": "center",
-      "flex-direction": "column"
-    };
+      errorStyle: {
+        color: "red"
+      },
+      chipStyle: {
+        "margin-top": "20px"
+      },
+      display: {
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column"
+      }
+    }
 
     if (this.state.hasError) {
       return (
         <div>
-          <h1 style={errorStyle}>{params.user} not found</h1>
+          <h1 style={styles.errorStyle}>{params.user} not found</h1>
         </div>
       );
     }
     if (params.user !== "") {
       return (
         <Fragment>
-          <div style={styles}>
-            <Chip style={ChipStyle}>
+          <div style={styles.display}>
+            <Chip style={styles.chipStyle}>
               <Avatar src={this.state.userInfos.avatar_url} />
               {params.user}
             </Chip>

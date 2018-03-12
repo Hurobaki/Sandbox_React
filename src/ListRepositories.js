@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-import { Link } from "react-router-dom";
 
 import { List, ListItem } from "material-ui/List";
 import ContentInbox from "material-ui/svg-icons/content/inbox";
