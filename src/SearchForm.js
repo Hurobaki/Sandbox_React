@@ -15,6 +15,12 @@ class SearchFormComponent extends Component {
     this.setState({ value: value });
   };
 
+  handleKeyPress = (event) => {
+    if(event.key === 'Enter') {
+      this.goToRepos();
+    }
+  }
+
   goToRepos = () => {
     const { history, updateSearch } = this.props;
     const { value } = this.state;
@@ -35,6 +41,7 @@ class SearchFormComponent extends Component {
           name="search"
           value={value}
           onChange={this.onChange}
+          onKeyPress={this.handleKeyPress}
           hintText="Username"
         />
         <p>{value}</p>
