@@ -5,6 +5,9 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import Avatar from "material-ui/Avatar";
 import Chip from "material-ui/Chip";
+import RaisedButton from "material-ui/RaisedButton/RaisedButton";
+
+const token = "d429fdccc548b0fd9fed2d5053748a82e77c4be7";
 
 class RepositoriesComponent extends Component {
   state = {
@@ -13,12 +16,18 @@ class RepositoriesComponent extends Component {
     userInfos: []
   };
 
+  
+
   async getUserRepositories(nextProps) {
     try {
-      console.log(nextProps);
       const query = await fetch(
-        `https://api.github.com/users/${nextProps}/repos`
+        `https://api.github.com/users/${nextProps}/repos?access_token=${token}`
       );
+      
+      if(query.status !== 200) {
+        throw new Error("User not found");
+      }
+
       const result = await query.json();
       return result;
     } catch (error) {
@@ -28,8 +37,10 @@ class RepositoriesComponent extends Component {
 
   async getUserInfos(nextProps) {
     try {
-      console.log(nextProps);
-      const query = await fetch(`https://api.github.com/users/${nextProps}`);
+      const query = await fetch(`https://api.github.com/users/${nextProps}?access_token=${token}`);
+      if (query.status !== 200) {
+        throw new Error("User not found");
+      }
       const result = await query.json();
       return result;
     } catch (error) {
@@ -37,12 +48,12 @@ class RepositoriesComponent extends Component {
     }
   }
 
-  componentWillReceiveProps({ search: nextSearch }) {
+  /*componentWillReceiveProps({ search: nextSearch }) {
     const { search } = this.props;
     if (search !== nextSearch) {
       this.getUserRepositories(nextSearch);
     }
-  }
+  }*/
 
   async componentDidMount() {
     const { match: { params } } = this.props;
@@ -58,18 +69,21 @@ class RepositoriesComponent extends Component {
 
       const infos = await this.getUserInfos(params.user);
 
-      if (infos.message === "Not Found") {
-        this.setState({
-          hasError: true
-        });
-      } else {
-        this.setState({
-          userInfos: infos
-        });
-      }
+  
+      this.setState({
+        userInfos: infos
+      });
+
     } catch (error) {
-      console.log(error);
+      this.setState({
+        hasError: true
+      })
     }
+  }
+
+  goToIndex = () => {
+    const { history } = this.props;
+    history.push(`/`);
   }
 
   render() {
@@ -80,7 +94,7 @@ class RepositoriesComponent extends Component {
         color: "red"
       },
       chipStyle: {
-        "margin-top": "20px"
+        marginTop: "20px"
       },
       display: {
         display: "flex",
@@ -91,8 +105,13 @@ class RepositoriesComponent extends Component {
 
     if (this.state.hasError) {
       return (
-        <div>
+        <div style={styles.display}>
           <h1 style={styles.errorStyle}>{params.user} not found</h1>
+          <RaisedButton
+          label="Back"
+          primary={true}
+          onClick={this.goToIndex}
+          />
         </div>
       );
     }

@@ -5,6 +5,8 @@ import Avatar from "material-ui/Avatar";
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
 
+const token = "d429fdccc548b0fd9fed2d5053748a82e77c4be7";
+
 class RepoInfoComponent extends Component {
   state = {
     repo: null
@@ -13,7 +15,7 @@ class RepoInfoComponent extends Component {
   async getRepoInfos() {
     try {
       const {match : {params}} = this.props;
-      const infos = await fetch (`https://api.github.com/repositories/${params.id}`)
+      const infos = await fetch (`https://api.github.com/repositories/${params.id}?access_token=${token}`)
       return await infos.json()
     } catch (error) {
       throw error
